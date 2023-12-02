@@ -51,9 +51,15 @@ let process_line ~process_words s =
   in
   aux s 0 0 None
 
-let process ~process_words ch =
+let process ?(part = 1) ch =
   let rec aux ch acc =
     try
+      let process_words =
+        match part with
+        | 1 -> false
+        | 2 -> true
+        | _ -> invalid_arg "unknown part"
+      in
       let calibration = process_line ~process_words (input_line ch) in
       aux ch (acc + calibration)
     with End_of_file -> acc
